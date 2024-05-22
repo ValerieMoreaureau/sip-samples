@@ -3,12 +3,26 @@ package com.mobius.software.samples.oio.multiplethreads.runnableImpl;
 import java.io.*;
 import java.net.Socket;
 
-public class ClientRunnable {
+public class ClientRunnable implements Runnable {
+    private String[] messages;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        ClientRunnable client = new ClientRunnable(new String[]{"Hello", "How are you?", "BYE"});
+		client.start();
+    }
+
+    public ClientRunnable(String[] messages) {
+        this.messages = messages;
+    }
+
+    @Override
+    public void run() {
+        start();
+    }
+
+    public void start() {
         try {
-            ClientRunnable client = new ClientRunnable();
-            client.startClient(new String[]{"Hello", "How are you?", "BYE"});
+            startClient(messages);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -29,3 +43,5 @@ public class ClientRunnable {
         }
     }
 }
+
+

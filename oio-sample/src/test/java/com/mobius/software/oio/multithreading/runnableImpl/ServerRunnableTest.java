@@ -3,43 +3,48 @@ package com.mobius.software.oio.multithreading.runnableImpl;
 import static org.junit.Assert.assertTrue;
 
 import java.io.*;
+import java.util.List;
 import java.util.concurrent.*;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.mobius.software.samples.oio.multiplethreads.runnableImpl.ClientRunnable;
+import com.mobius.software.samples.oio.multiplethreads.runnableImpl.ClientTask;
 import com.mobius.software.samples.oio.multiplethreads.runnableImpl.ServerRunnable;
 
 public class ServerRunnableTest {
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
     private final PrintStream standardOut = System.out;
 
+    private ExecutorService executorService;
+    private ServerRunnable serverRunnable;
+
     @Before
     public void setUp() {
-        //System.setOut(new PrintStream(outputStreamCaptor));
+        System.setOut(new PrintStream(outputStreamCaptor));
+        executorService = Executors.newFixedThreadPool(3); // Increased thread pool size to handle multiple clients
+        serverRunnable = new ServerRunnable();
+        executorService.execute(serverRunnable);
     }
 
     @After
     public void tearDown() {
+        serverRunnable.stop();
+        executorService.shutdownNow();
         System.setOut(standardOut);
     }
 
     @Test
     public void testClientServerCommunication() throws IOException, InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(3); // Increase thread pool size to handle multiple clients
         CountDownLatch latch = new CountDownLatch(2); // Adjust count for the main thread and two client threads
-
-        // Start server in a separate thread
-        executorService.execute(new ServerTask());
 
         // Delay to ensure the server starts before the clients
         Thread.sleep(1000);
 
         // Start multiple clients
         for (int i = 0; i < 2; i++) {
-            executorService.execute(new ClientTask(latch));
+            executorService.execute(new ClientTask(latch, new String[]{"Hello", "How are you?", "BYE"}));
         }
 
         latch.await();
@@ -49,6 +54,7 @@ public class ServerRunnableTest {
         executorService.awaitTermination(1, TimeUnit.SECONDS);
 
         // Print the communication dialogue to the console
+        System.setOut(standardOut);
         String consoleOutput = outputStreamCaptor.toString();
         System.out.println("Communication Dialogue:\n" + consoleOutput);
 
@@ -57,38 +63,13 @@ public class ServerRunnableTest {
         assertTrue("Console output should contain 'How are you?'", consoleOutput.contains("How are you?"));
         assertTrue("Console output should contain 'BYE'", consoleOutput.contains("BYE"));
         assertTrue("Console output should contain 'Server: MESSAGE RECEIVED'", consoleOutput.contains("Server: MESSAGE RECEIVED"));
+
+        // Verify messages saved on the server
+        List<String> messages = serverRunnable.getMessages();
+        assertTrue("Messages should contain 'Hello'", messages.contains("Hello"));
+        assertTrue("Messages should contain 'How are you?'", messages.contains("How are you?"));
+        assertTrue("Messages should contain 'BYE'", messages.contains("BYE"));
     }
 }
 
-class ServerTask implements Runnable {
 
-    public ServerTask() {
- 
-    }
-
-    @Override
-    public void run() {
-        ServerRunnable server = new ServerRunnable();
-        server.startServer();
-    }
-}
-
-class ClientTask implements Runnable {
-    private final CountDownLatch latch;
-
-    public ClientTask(CountDownLatch latch) {
-        this.latch = latch;
-    }
-
-    @Override
-    public void run() {
-        try {
-            ClientRunnable client = new ClientRunnable();
-            client.startClient(new String[]{"Hello", "How are you?", "BYE"});
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            latch.countDown();
-        }
-    }
-}
