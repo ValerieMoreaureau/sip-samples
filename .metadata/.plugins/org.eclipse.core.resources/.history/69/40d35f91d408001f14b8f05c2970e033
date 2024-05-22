@@ -1,0 +1,5 @@
+package com.mobius.software.samples.oio.multiplethreads.runnableImpl.threads;
+
+public class ClientRunnable {
+
+}

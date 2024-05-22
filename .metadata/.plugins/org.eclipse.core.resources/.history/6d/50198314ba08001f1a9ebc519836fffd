@@ -1,0 +1,69 @@
+package com.mobius.software.oio.multithreading;
+
+import com.mobius.software.samples.oio.multiplethreads.*;
+
+import org.junit.*;
+import java.io.*;
+import java.util.concurrent.*;
+import static org.junit.Assert.assertTrue;
+
+public class MultithreadingTest {
+    private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
+    private final PrintStream standardOut = System.out;
+
+    @Before
+    public void setUp() {
+        System.setOut(new PrintStream(outputStreamCaptor));
+    }
+
+    @After
+    public void tearDown() {
+        System.setOut(standardOut);
+    } 
+
+    @Test
+    public void testClientServerCommunication() throws IOException, InterruptedException {
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        CountDownLatch latch = new CountDownLatch(2); // Using CountDownLatch to coordinate the shutdown
+
+        executorService.execute(() -> {
+            try {
+                ServerMT server = new ServerMT();
+                server.startServer(); 
+            } finally {
+                latch.countDown(); 
+            }
+        });  
+
+        // Delay to ensure the server starts before the client 
+        Thread.sleep(1000);
+
+        // Start the client with messages to send
+        executorService.execute(() -> {
+            try {
+                ClientMT client = new ClientMT(); // Create an instance of the client
+                client.startClient(new String[]{"Hello", "How are you?", "BYE"}); // Start the client with messages
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                latch.countDown(); // Signal that the client thread has finished
+            }
+        });
+ 
+        latch.await();
+
+        // Shutdown executor service
+        executorService.shutdown();
+        executorService.awaitTermination(1, TimeUnit.MINUTES);
+
+        // Print the communication dialogue to the console
+        String consoleOutput = outputStreamCaptor.toString();
+        System.out.println("Communication Dialogue:\n" + consoleOutput);
+
+        // Verify the communication by checking the console output
+        assertTrue("Console output should contain 'Hello'", consoleOutput.contains("Hello"));
+        assertTrue("Console output should contain 'How are you?'", consoleOutput.contains("How are you?"));
+        assertTrue("Console output should contain 'BYE'", consoleOutput.contains("BYE"));
+        assertTrue("Console output should contain 'Server: MESSAGE RECEIVED'", consoleOutput.contains("Server: MESSAGE RECEIVED"));
+    }
+}

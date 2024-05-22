@@ -1,0 +1,30 @@
+package com.mobius.software.samples.oio.multiplethreads.threadsImpl;
+
+import java.io.*;
+import java.net.Socket;
+
+public class ClientMT implements Runnable {
+    private final String[] messages;
+
+    public ClientMT(String[] messages) {
+        this.messages = messages;
+    }
+
+    @Override
+    public void run() {
+        try (Socket socket = new Socket("localhost", 1235);
+             BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+             BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
+            for (String message : messages) {
+                writer.write(message + "\n");
+                writer.flush();
+                System.out.println("Sent: " + message);
+                String response = reader.readLine();
+                System.out.println("Received: " + response);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
