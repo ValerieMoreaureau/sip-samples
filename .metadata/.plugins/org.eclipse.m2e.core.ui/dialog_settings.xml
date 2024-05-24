@@ -2,6 +2,9 @@
 <section name="Workbench">
 	<section name="MavenProjectWizardLocationPage">
 		<list key="location">
+			<item value="/home/valeriiamukha/Desktop/mobius/sip-samples"/>
+			<item value="/home/valeriiamukha/Desktop/mobius/sip-samples/oio-sample"/>
+			<item value="/home/valeriiamukha/Desktop/mobius/sip-samples/sip-stack-sample"/>
 			<item value="/home/valeriiamukha/Desktop/mobius/corsac-samples"/>
 		</list>
 		<list key="projectNameTemplate">
@@ -14,6 +17,7 @@
 		</list>
 	</section>
 	<section name="MavenProjectWizardArchetypePage">
+		<item key="catalog" value="All Catalogs"/>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
 			<item value="[artifactId]-TRUNK"/>
@@ -44,14 +48,27 @@
 	</section>
 	<section name="MavenProjectWizardArtifactPage">
 		<list key="groupId">
-			<item value="corsac-samples"/>
-			<item value="oio-sample"/>
+			<item value="sip"/>
+			<item value="stackExamples"/>
+			<item value="SipStack"/>
+			<item value="StackSamples"/>
+			<item value="SIPStack"/>
+			<item value="com.mobius.software.sip.sipStack"/>
+			<item value="samples.sipStack"/>
+			<item value="sipstack"/>
+			<item value="mobius"/>
 		</list>
 		<list key="name">
 		</list>
 		<list key="artifactId">
+			<item value="sip-examples"/>
+			<item value="stack-examples"/>
+			<item value="sip-example"/>
+			<item value="stack-samples"/>
+			<item value="sip-startstop"/>
+			<item value="sip-stack"/>
+			<item value="startStopSamples"/>
 			<item value="oio-sample"/>
-			<item value="single-threaded"/>
 		</list>
 		<list key="projectNameTemplate">
 			<item value="[artifactId]"/>
@@ -63,10 +80,36 @@
 		</list>
 		<list key="version">
 			<item value="0.0.1-SNAPSHOT"/>
+			<item value="1"/>
 		</list>
 	</section>
 	<section name="org.eclipse.m2e.core.pom.overview">
 	</section>
 	<section name="org.eclipse.m2e.core.pom.dependencies">
+	</section>
+	<section name="MavenModuleWizardParentPage">
+		<list key="moduleName">
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
+	</section>
+	<section name="MavenProjectImportWizardPage">
+		<list key="rootDirectory">
+			<item value="/home/valeriiamukha/Desktop/mobius/sip-samples/sip-stack-sample"/>
+		</list>
+		<list key="projectNameTemplate">
+			<item value="[artifactId]"/>
+			<item value="[artifactId]-TRUNK"/>
+			<item value="[artifactId]-[version]"/>
+			<item value="[groupId].[artifactId]"/>
+			<item value="[groupId].[artifactId]-[version]"/>
+			<item value="[name]"/>
+		</list>
 	</section>
 </section>

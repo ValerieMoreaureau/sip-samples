@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="ServerRunnableTest" project="oio-sample" tests="1" started="1" failures="0" errors="0" ignored="0">
-  <testsuite name="com.mobius.software.oio.multithreading.runnableImpl.ServerRunnableTest" time="2.011" displayname="ServerRunnableTest" uniqueid="[engine:junit-vintage]/[runner:com.mobius.software.oio.multithreading.runnableImpl.ServerRunnableTest]">
-    <testcase name="testClientServerCommunication" classname="com.mobius.software.oio.multithreading.runnableImpl.ServerRunnableTest" time="2.011" displayname="testClientServerCommunication" uniqueid="[engine:junit-vintage]/[runner:com.mobius.software.oio.multithreading.runnableImpl.ServerRunnableTest]/[test:testClientServerCommunication(com.mobius.software.oio.multithreading.runnableImpl.ServerRunnableTest)]"/>
-  </testsuite>
-</testrun>

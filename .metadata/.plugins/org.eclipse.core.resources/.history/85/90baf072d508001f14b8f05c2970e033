@@ -1,5 +1,0 @@
-package com.mobius.software.samples.oio.multiplethreads.threadsImpl;
-
-public class ServerMT {
-
-}
